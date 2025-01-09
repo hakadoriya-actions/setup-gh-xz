@@ -1,0 +1,24 @@
+name: setup-gh-xz
+# MEMO: Description must be less than 125 characters.
+description: "A GitHub Action to setup gh-xz."
+author: "hakadoriya"
+
+branding:
+  icon: search
+  color: gray-dark
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/checkout@v4
+      with:
+        repository: hakadoriya/gh-xz
+        path: ./gh-xz
+    - name: Install gh extension gh-xz
+      shell: bash
+      run: |
+        # In GitHub Actions, `gh extension install` cannot be executed (due to the restricted GITHUB_TOKEN, git clone fails with 404).
+        # So, clone with `actions/checkout` and then move to the gh extension directory.
+        # ref: <https://github.com/cli/cli/discussions/6988>
+        mkdir -p ~/.local/share/gh/extensions
+        mv ./gh-xz ~/.local/share/gh/extensions/gh-xz
